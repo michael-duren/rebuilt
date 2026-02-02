@@ -15,6 +15,8 @@ func main() {
 	chars := flag.Bool("m", false, "count characters, multi byte characters are included")
 	longestLine := flag.Bool("L", false, "write the length of the line containing the most bytes")
 
+	flag.Parse()
+
 	files := flag.Args()
 
 	opts := &wc.Options{
