@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -31,19 +32,34 @@ type wordCount struct {
 	bytes       int64
 	chars       int64
 	longestLine int64
+	error       error
+	index       int
 }
 
 func Run(files []string, opts *Options) (string, error) {
-	wordCounts := []wordCount{}
-	for _, filename := range files {
-		wc, err := processFile(filename)
-		if err != nil {
-			return "", err
-		}
-
-		wordCounts = append(wordCounts, *wc)
+	ch := make(chan wordCount)
+	for i, filename := range files {
+		go func(filename string, i int) {
+			wc, err := processFile(filename, i)
+			if err != nil {
+				ch <- wordCount{
+					error: err,
+				}
+				return
+			}
+			ch <- *wc
+		}(filename, i)
 	}
 
+	wordCounts := []wordCount{}
+
+	for range len(files) {
+		wordCounts = append(wordCounts, <-ch)
+	}
+
+	sort.Slice(wordCounts, func(i, j int) bool {
+		return wordCounts[i].index < wordCounts[j].index
+	})
 	return formatResult(wordCounts, opts), nil
 }
 
@@ -52,6 +68,11 @@ func formatResult(wordCounts []wordCount, opts *Options) string {
 
 	for _, wc := range wordCounts {
 		sb.WriteString(fmt.Sprintf("%s ", wc.filename))
+		if wc.error != nil {
+			sb.WriteString(fmt.Sprintf("error: %q \n", wc.error))
+			continue
+		}
+
 		if opts.NonePassed() {
 			sb.WriteString(fmt.Sprintf("word: %d, line: %d, character: %d, byte: %d\n", wc.words, wc.lines, wc.chars, wc.bytes))
 			continue
@@ -76,9 +97,9 @@ func formatResult(wordCounts []wordCount, opts *Options) string {
 	return sb.String()
 }
 
-func NewWordCount(filename string, lines, words, bytes, countChars, longestLine int64) *wordCount {
+func NewWordCount(filename string, lines, words, bytes, countChars, longestLine int64, index int) *wordCount {
 	return &wordCount{
-		filename, lines, words, bytes, countChars, longestLine,
+		filename, lines, words, bytes, countChars, longestLine, nil, index,
 	}
 }
 
@@ -90,7 +111,7 @@ func (wc *wordCount) AddLine(lc *lineCounts) {
 	wc.longestLine = max(wc.longestLine, lc.bytes)
 }
 
-func processFile(filename string) (wc *wordCount, fileErr error) {
+func processFile(filename string, i int) (wc *wordCount, fileErr error) {
 	file, err := os.Open(filename)
 
 	if err != nil {
@@ -103,12 +124,11 @@ func processFile(filename string) (wc *wordCount, fileErr error) {
 			fileErr = err
 		}
 	}()
-	return process(file, filename)
+	return process(file, filename, i)
 }
 
-func process(r io.Reader, filename string) (wc *wordCount, fileErr error) {
-
-	wc = NewWordCount(filename, 0, 0, 0, 0, 0)
+func process(r io.Reader, filename string, i int) (wc *wordCount, fileErr error) {
+	wc = NewWordCount(filename, 0, 0, 0, 0, 0, i)
 
 	scanner := bufio.NewReader(r)
 	for {

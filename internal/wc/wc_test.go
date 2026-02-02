@@ -1,6 +1,7 @@
 package wc
 
 import (
+	"errors"
 	"strings"
 	"testing"
 )
@@ -56,7 +57,7 @@ func TestProcess(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			input := strings.NewReader(tt.input)
-			wc, err := process(input, "test")
+			wc, err := process(input, "test", 0)
 			if err != nil {
 				t.Fatalf("unexpected error: %v", err)
 			}
@@ -157,6 +158,23 @@ func TestFormatResult(t *testing.T) {
 			wordCounts: []wordCount{},
 			opts:       &Options{},
 			want:       "",
+		},
+		{
+			name: "with error",
+			wordCounts: []wordCount{
+				{filename: "bad.txt", error: errors.New("file not found")},
+			},
+			opts: &Options{},
+			want: "bad.txt error: \"file not found\" \n",
+		},
+		{
+			name: "mixed success and error",
+			wordCounts: []wordCount{
+				{filename: "good.txt", lines: 5, words: 10, bytes: 50, chars: 50, longestLine: 20},
+				{filename: "bad.txt", error: errors.New("permission denied")},
+			},
+			opts: &Options{CountLines: true},
+			want: "good.txt lines: 5 \nbad.txt error: \"permission denied\" \n",
 		},
 	}
 
