@@ -68,7 +68,7 @@ func formatResult(wordCounts []wordCount, opts *Options) string {
 		if opts.CountChars {
 			sb.WriteString(fmt.Sprintf("chars: %d ", wc.chars))
 		}
-		if opts.CountChars {
+		if opts.LongestLine {
 			sb.WriteString(fmt.Sprintf("longest line: %d ", wc.longestLine))
 		}
 		sb.WriteByte('\n')
