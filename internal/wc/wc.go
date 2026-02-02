@@ -103,12 +103,16 @@ func processFile(filename string) (wc *wordCount, fileErr error) {
 			fileErr = err
 		}
 	}()
+	return process(file, filename)
+}
+
+func process(r io.Reader, filename string) (wc *wordCount, fileErr error) {
 
 	wc = NewWordCount(filename, 0, 0, 0, 0, 0)
 
-	reader := bufio.NewReader(file)
+	scanner := bufio.NewReader(r)
 	for {
-		line, err := reader.ReadString('\n')
+		line, err := scanner.ReadString('\n')
 		if err == io.EOF {
 			if len(line) > 0 {
 				lc := countLine(line)
