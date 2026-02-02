@@ -17,7 +17,7 @@ func main() {
 
 	files := flag.Args()
 
-	opts := wc.Options{
+	opts := &wc.Options{
 		CountLines:  *lines,
 		CountWords:  *words,
 		CountBytes:  *bytes,
@@ -25,8 +25,10 @@ func main() {
 		LongestLine: *longestLine,
 	}
 
-	if err := wc.Run(files, opts); err != nil {
+	output, err := wc.Run(files, opts)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "wc: %v\n", err)
 		os.Exit(1)
 	}
+	fmt.Print(output)
 }
