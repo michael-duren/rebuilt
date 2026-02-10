@@ -1,0 +1,9 @@
+lb:
+	go run cmd/lb/main.go 
+
+test:
+	go tool staticcheck .
+	go test -v ./...
+
+fuzz:
+	go test -run NONE -fuzz . -fuzztime 10s

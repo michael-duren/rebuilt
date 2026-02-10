@@ -37,6 +37,14 @@ type wordCount struct {
 }
 
 func Run(files []string, opts *Options) (string, error) {
+	if len(files) == 0 {
+		wc, err := process(os.Stdin, "stdin", 0)
+		if err != nil {
+			return "", err
+		}
+		return formatResult([]wordCount{*wc}, opts), nil
+	}
+
 	ch := make(chan wordCount)
 	for i, filename := range files {
 		go func(filename string, i int) {
