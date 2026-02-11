@@ -1,0 +1,6 @@
+starting worker pool requests
+completed 400000 requests in 4m11.250761791s (1592 req/s)
+===PRINTING HTTP STATUSCODE results from 400000 requests, NOTE: errored requests will not print===
+STATUS CODE 200: 191627 RESPONSES
+STATUS CODE 502: 208373 RESPONSES
+===PRINTING ERROR results from 400000 requests===
