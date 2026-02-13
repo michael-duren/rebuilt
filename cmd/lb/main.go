@@ -6,12 +6,26 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"sync"
 
 	"gopkg.in/yaml.v3"
 )
 
+type serverIndex struct {
+	mu    sync.Mutex
+	index int
+}
+
+func (s *serverIndex) GetIndex(n int) int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	curr := s.index
+	s.index = (s.index + 1) % n
+	return curr
+}
+
 var port string
-var index int = 0
+var index serverIndex
 
 const CONFIG_PATH = "./servers.yaml"
 
@@ -69,7 +83,7 @@ type RequestHandler func(http.ResponseWriter, *http.Request)
 func requestHandlerFactory(servers []string) (RequestHandler, error) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logRequest(r)
-		res, err := forwardTraffic(servers[index], r)
+		res, err := forwardTraffic(servers[index.GetIndex(len(servers))], r)
 		if err != nil {
 			fmt.Fprintf(os.Stdout, "error while forwarding traffic: %v\n", err)
 			w.WriteHeader(http.StatusBadGateway)
@@ -80,9 +94,6 @@ func requestHandlerFactory(servers []string) (RequestHandler, error) {
 
 		w.WriteHeader(res.StatusCode)
 		io.Copy(w, res.Body)
-
-		index++
-		index %= len(servers) // reset to zero at end
 	}, nil
 }
 
