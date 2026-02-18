@@ -31,3 +31,13 @@ go.work.sum
 # .idea/
 # .vscode/
 .DC_Store
+
+# zig
+.zig-cache/
+zig-out/
+/release/
+/debug/
+/build/
+/build-*/
+/docgen_tmp/
+

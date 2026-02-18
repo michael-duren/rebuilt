@@ -96,7 +96,7 @@ func executeRequest(path string, statusCodes chan<- requestResult, wg *sync.Wait
 	}
 
 	// drains body so go uses same tcp connection
-	io.Copy(io.Discard, res.Body)
 	defer res.Body.Close()
+	io.Copy(io.Discard, res.Body)
 	statusCodes <- requestResult{statusCode: res.StatusCode}
 }
