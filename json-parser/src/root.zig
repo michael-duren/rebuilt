@@ -1,23 +1,31 @@
 //! By convention, root.zig is the root source file when making a library.
 const std = @import("std");
 
-pub fn bufferedPrint() !void {
-    // Stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    var stdout_buffer: [1024]u8 = undefined;
-    var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
-    const stdout = &stdout_writer.interface;
+const ParseError = error{InvalidSyntax};
+const JsonValue = union(enum) {
+    null_value,
+    bool_value: bool,
+    number: f64,
+    string: []const u8,
+    array: std.ArrayList(JsonValue),
+    object: std.StringHashMap(JsonValue),
+};
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
-
-    try stdout.flush(); // Don't forget to flush!
+pub fn parse(str: []const u8) ParseError!JsonValue {
+    if (str.len == 0 or str[0] != '{' or str[str.len - 1] != '}') {
+        return error.InvalidSyntax;
+    }
+    return .null_value;
 }
 
-pub fn add(a: i32, b: i32) i32 {
-    return a + b;
+test "parse parses an empty object {}" {
+    const obj = "{}";
+    const res = try parse(obj);
+
+    try std.testing.expect(res == .null_value);
 }
 
-test "basic add functionality" {
-    try std.testing.expect(add(3, 7) == 10);
+test "parse parses an empty string" {
+    const obj = "";
+    try std.testing.expectError(error.InvalidSyntax, parse(obj));
 }
