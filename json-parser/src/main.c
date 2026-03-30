@@ -70,6 +70,26 @@ Parser parser_new(const char *input) {
     return p;
 }
 
+int parse_json(Parser *p) {
+    if (p->current.type != TOKEN_LBRACE) {
+        return 0;
+    }
+
+    p->current = lexer_next(&p->lexer);
+
+    if (p->current.type != TOKEN_RBRACE) {
+        return 0;
+    }
+
+    p->current = lexer_next(&p->lexer);
+
+    if (p->current.type != TOKEN_EOF) {
+        return 0;
+    }
+
+    return 1;
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <file.json>\n", argv[0]);
@@ -98,4 +118,14 @@ int main(int argc, char *argv[]) {
     fclose(f);
 
     Parser p = parser_new(buf);
+    int valid = parse_json(&p);
+    free(buf);
+
+    if (valid) {
+        printf("Valid JSON\n");
+        return 0;
+    }
+
+    printf("Invalid JSON\n");
+    return 1;
 }

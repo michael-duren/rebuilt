@@ -31,5 +31,8 @@ clean:
 run: $(TARGET)
 	./$(TARGET)
 
-test:
-	@echo "No tests configured yet"
+test: all
+	./test.sh 
+
+debug-test: all
+	./test.sh -v
