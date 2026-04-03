@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -std=c11 -Iinclude
+CFLAGS = -Wall -Wextra -Wpedantic -std=c23 -Iinclude
 LDFLAGS =
 
 SRC_DIR = src
@@ -29,7 +29,7 @@ clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) ./tests/step1/valid.json
 
 test: all
 	./test.sh 
