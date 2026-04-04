@@ -36,3 +36,7 @@ test: all
 
 debug-test: all
 	./test.sh -v
+
+.PHONY: bear
+bear:
+	bear -- $(MAKE) clean all
