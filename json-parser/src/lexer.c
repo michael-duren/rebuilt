@@ -37,6 +37,9 @@ Token lexer_next(Lexer* l) {
         case '}':
             t.type = TOKEN_RBRACE;
             break;
+        case '"':
+            t.type = TOKEN_DELIMIETER;
+            break;
         default:
             t.type = TOKEN_ERROR;
             break;

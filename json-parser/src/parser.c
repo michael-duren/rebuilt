@@ -1,5 +1,7 @@
 #include "../include/parser.h"
 
+#include <stdio.h>
+
 Parser parser_new(const char* input) {
     Parser p;
     p.lexer = lexer_new(input);
@@ -7,22 +9,35 @@ Parser parser_new(const char* input) {
     return p;
 }
 
-int parse_json(Parser* p) {
+bool parse_internal(Parser* p, bool inDelimeter) {
+    printf("token is: %d\n\n", p->current.type);
+    if (inDelimeter) {
+        return false;
+    }
+    return true;
+}
+
+bool parse_json(Parser* p) {
     if (p->current.type != TOKEN_LBRACE) {
-        return 0;
+        return false;
+    }
+
+    int result = parse_internal(p, false);
+    if (!result) {
+        return result;
     }
 
     p->current = lexer_next(&p->lexer);
 
     if (p->current.type != TOKEN_RBRACE) {
-        return 0;
+        return false;
     }
 
     p->current = lexer_next(&p->lexer);
 
     if (p->current.type != TOKEN_EOF) {
-        return 0;
+        return false;
     }
 
-    return 1;
+    return true;
 }

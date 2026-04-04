@@ -10,6 +10,6 @@ typedef struct {
 } Parser;
 
 Parser parser_new(const char* input);
-int parse_json(Parser* p);
+bool parse_json(Parser* p);
 
 #endif  // PARSER
