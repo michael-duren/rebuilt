@@ -11,7 +11,7 @@ Lexer lexer_new(const char* input) {
     return l;
 }
 
-static void skip_whitespace(Lexer* l) {
+void skip_whitespace(Lexer* l) {
     while (l->pos < l->len && isspace((unsigned char)l->input[l->pos])) {
         l->pos++;
     }

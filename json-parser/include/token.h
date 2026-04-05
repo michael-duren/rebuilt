@@ -4,7 +4,11 @@
 typedef enum {
     TOKEN_LBRACE,
     TOKEN_RBRACE,
-    TOKEN_DELIMIETER,
+    TOKEN_DELIMITER,
+
+    TOKEN_COLON,
+
+    TOKEN_COMMA,
 
     TOKEN_KEY,
     TOKEN_VALUE,

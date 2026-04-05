@@ -1,6 +1,9 @@
 #include "../include/parser.h"
 
+#include <lexer.h>
 #include <stdio.h>
+
+#include "token.h"
 
 Parser parser_new(const char* input) {
     Parser p;
@@ -9,12 +12,28 @@ Parser parser_new(const char* input) {
     return p;
 }
 
-bool parse_internal(Parser* p, bool inDelimeter) {
-    printf("token is: %d\n\n", p->current.type);
-    if (inDelimeter) {
-        return false;
+static ParseResult parse_internal(Parser* p, bool in_delimiter) {
+    while (true) {
+        p->current = lexer_next(&p->lexer);
+        TokenType type = p->current.type;
+
+        if (in_delimiter) {
+            if (type != TOKEN_DELIMITER && type != TOKEN_EOF) {
+                continue;
+            }
+            if (type == TOKEN_EOF) {
+                return (ParseResult){.success = false, .finished = true};
+            }
+            return (ParseResult){.success = true, .finished = true};
+        }
+
+        if (type == TOKEN_DELIMITER) {
+            in_delimiter = true;
+            continue;
+        }
+
+        return (ParseResult){.success = false, .finished = true};
     }
-    return true;
 }
 
 bool parse_json(Parser* p) {
@@ -22,19 +41,19 @@ bool parse_json(Parser* p) {
         return false;
     }
 
-    int result = parse_internal(p, false);
-    if (!result) {
-        return result;
+    while (true) {
+        ParseResult r = parse_internal(p, false);
+        if (r.finished) {
+            break;
+        }
     }
 
     p->current = lexer_next(&p->lexer);
-
     if (p->current.type != TOKEN_RBRACE) {
         return false;
     }
 
     p->current = lexer_next(&p->lexer);
-
     if (p->current.type != TOKEN_EOF) {
         return false;
     }
