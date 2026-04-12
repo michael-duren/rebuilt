@@ -6,6 +6,7 @@
 typedef struct {
     const char* input;
     int pos;
+    int read_pos;
     int len;
 } Lexer;
 
