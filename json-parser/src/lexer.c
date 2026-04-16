@@ -1,32 +1,50 @@
 #include "../include/lexer.h"
-
+#include <_stdio.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
-Lexer lexer_new(const char* input) {
-    Lexer l;
-    l.input = input;
-    l.pos = 0;
-    l.len = (int)strlen(input);
 
+static char read_next(Lexer *l) {
+    if (l->len < l->read_pos) {
+        return NULL;
+    }
+
+    char next = l->input[l->read_pos];
+    l->read_pos++;
+    l->pos++;
+    return next;
+}
+
+static char peek(Lexer *l) {
+    if (l->len < l->read_pos) {
+        return NULL;
+    }
+
+    return l->input[l->read_pos];
+}
+
+Lexer lexer_new(const char* input) {
+    Lexer l = {
+        .input = input,
+        .read_pos = 0,
+        .pos = 0,
+        .len = (int)strlen(input),
+    };
+    read_next(&l);
     return l;
 }
 
-void skip_whitespace(Lexer* l) {
+static void skip_whitespace(Lexer* l) {
     while (l->pos < l->len && isspace((unsigned char)l->input[l->pos])) {
         l->pos++;
     }
 }
 
-void skip_comment(Lexer* l) {
+static void skip_comment(Lexer* l) {
     while (l->pos < l->len && l->input[l->pos] != '\n' && l->input[l->pos] != EOF) {
         l->pos++;
     }
-}
-
-char peek(Lexer* l) {
-
 }
 
 Token lexer_next(Lexer* l) {

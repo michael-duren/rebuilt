@@ -8,6 +8,7 @@ typedef struct {
     int pos;
     int read_pos;
     int len;
+    char curr;
 } Lexer;
 
 Lexer lexer_new(const char* input);
