@@ -4,14 +4,12 @@
 typedef enum {
     TOKEN_LBRACE,
     TOKEN_RBRACE,
-    TOKEN_DELIMITER,
+    TOKEN_STRING,
+    TOKEN_NUMBER,
+    TOKEN_BOOL,
 
     TOKEN_COLON,
-
     TOKEN_COMMA,
-
-    TOKEN_KEY,
-    TOKEN_VALUE,
 
     TOKEN_EOF,
     TOKEN_ERROR,
