@@ -10,6 +10,7 @@ typedef enum {
 
     TOKEN_COLON,
     TOKEN_COMMA,
+    TOKEN_DELIMITER,
 
     TOKEN_EOF,
     TOKEN_ERROR,

@@ -13,7 +13,7 @@
       "-o",
       "obj/lexer.o"
     ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
+    "directory": "/home/mduren/Code/rebuilt/json-parser",
     "output": "obj/lexer.o"
   },
   {
@@ -30,7 +30,7 @@
       "-o",
       "obj/main.o"
     ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
+    "directory": "/home/mduren/Code/rebuilt/json-parser",
     "output": "obj/main.o"
   },
   {
@@ -47,97 +47,7 @@
       "-o",
       "obj/parser.o"
     ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
+    "directory": "/home/mduren/Code/rebuilt/json-parser",
     "output": "obj/parser.o"
-  },
-  {
-    "file": "unity/unity.c",
-    "arguments": [
-      "/usr/bin/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-std=c23",
-      "-Iinclude",
-      "-Iunity",
-      "-c",
-      "unity/unity.c",
-      "-o",
-      "obj/test/unity.o"
-    ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
-    "output": "obj/test/unity.o"
-  },
-  {
-    "file": "src/lexer.c",
-    "arguments": [
-      "/usr/bin/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-std=c23",
-      "-Iinclude",
-      "-Iunity",
-      "-c",
-      "src/lexer.c",
-      "-o",
-      "obj/test/lexer.o"
-    ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
-    "output": "obj/test/lexer.o"
-  },
-  {
-    "file": "src/parser.c",
-    "arguments": [
-      "/usr/bin/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-std=c23",
-      "-Iinclude",
-      "-Iunity",
-      "-c",
-      "src/parser.c",
-      "-o",
-      "obj/test/parser.o"
-    ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
-    "output": "obj/test/parser.o"
-  },
-  {
-    "file": "tests/unit/test_lexer.c",
-    "arguments": [
-      "/usr/bin/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-std=c23",
-      "-Iinclude",
-      "-Iunity",
-      "-c",
-      "tests/unit/test_lexer.c",
-      "-o",
-      "obj/test/test_lexer.o"
-    ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
-    "output": "obj/test/test_lexer.o"
-  },
-  {
-    "file": "tests/unit/test_runner.c",
-    "arguments": [
-      "/usr/bin/gcc",
-      "-Wall",
-      "-Wextra",
-      "-Wpedantic",
-      "-std=c23",
-      "-Iinclude",
-      "-Iunity",
-      "-c",
-      "tests/unit/test_runner.c",
-      "-o",
-      "obj/test/test_runner.o"
-    ],
-    "directory": "/Users/michaelduren/Code/learning/go/rebuilt/json-parser",
-    "output": "obj/test/test_runner.o"
   }
 ]

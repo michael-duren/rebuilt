@@ -1,8 +1,5 @@
 #include "../include/parser.h"
-
 #include <lexer.h>
-#include <stdio.h>
-
 #include "token.h"
 
 Parser parser_new(const char* input) {

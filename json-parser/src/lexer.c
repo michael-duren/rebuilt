@@ -1,6 +1,5 @@
 #include "../include/lexer.h"
 
-#include <_stdio.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +7,7 @@
 
 static char read_next(Lexer* l) {
     if (l->len < l->read_pos) {
-        return NULL;
+        return '\0';
     }
 
     char next = l->input[l->read_pos];
@@ -19,7 +18,7 @@ static char read_next(Lexer* l) {
 
 static char peek(Lexer* l) {
     if (l->len < l->read_pos) {
-        return NULL;
+        return '\0';
     }
 
     return l->input[l->read_pos];
@@ -50,8 +49,8 @@ static void skip_comment(Lexer* l) {
 }
 
 static Token read_string(Lexer* l) {
-    char* value = malloc(1024);
-    int len = 0;
+    (void)l;
+    return (Token){.type = TOKEN_ERROR};
 }
 
 static bool is_letter(char ch) {
